@@ -25,7 +25,7 @@
 
 -->
 
-<project name="log4jdbc" default="all" basedir="..">
+<project name="log4jdbc" default="all" basedir=".">
 
   <!-- the jdbc.level flag should be set externally to either 3 or 4
 
