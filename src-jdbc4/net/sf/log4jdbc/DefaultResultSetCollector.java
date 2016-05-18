@@ -43,10 +43,12 @@ public class DefaultResultSetCollector implements ResultSetCollector {
     private static final List<String> GETTERS = Arrays.asList(new String[]{"getString", "getLong", "getInt", "getDate", "getTimestamp", "getTime",
         "getBigDecimal", "getFloat", "getDouble", "getByte", "getShort", "getObject", "getBoolean",});
 
+    @Override
     public List<List<Object>> getRows() {
         return rows;
     }
 
+    @Override
     public int getColumnCount() {
         try {
             return metaData.getColumnCount();
@@ -55,6 +57,7 @@ public class DefaultResultSetCollector implements ResultSetCollector {
         }
     }
 
+    @Override
     public void reset() {
         rows = null;
         row = null;
@@ -91,6 +94,7 @@ public class DefaultResultSetCollector implements ResultSetCollector {
         }
     }
 
+    @Override
     public String getColumnName(int column) {
         try {
             return metaData.getColumnName(column);
@@ -114,6 +118,7 @@ public class DefaultResultSetCollector implements ResultSetCollector {
    * ResultSetSpy, java.lang.String, java.lang.Object, java.lang.Object,
    * java.lang.Object)
      */
+    @Override
     public boolean methodReturned(ResultSetSpy resultSetSpy, String methodCall, Object returnValue, Object targetObject, Object... methodParams) {
         if (methodCall.startsWith("get") && methodParams != null && methodParams.length == 1) {
             String methodName = methodCall.substring(0, methodCall.indexOf('('));

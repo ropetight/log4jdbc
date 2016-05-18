@@ -80,6 +80,7 @@ public class Slf4jSpyLogDelegator implements SpyLogDelegator {
      *
      * @return true if any of the 6 spy jdbc/sql loggers are enabled at debug info or error level.
      */
+    @Override
     public boolean isJdbcLoggingEnabled() {
         return jdbcLogger.isErrorEnabled() || resultSetLogger.isErrorEnabled() || sqlOnlyLogger.isErrorEnabled()
                 || sqlTimingLogger.isErrorEnabled() || connectionLogger.isErrorEnabled() || resultSetTableLogger.isErrorEnabled();
@@ -95,6 +96,7 @@ public class Slf4jSpyLogDelegator implements SpyLogDelegator {
      * @param execTime optional amount of time that passed before an exception was thrown when sql was being executed.
      * caller should pass -1 if not used
      */
+    @Override
     public void exceptionOccured(Spy spy, String methodCall, Exception e, String sql, long execTime) {
         String classType = spy.getClassType();
         Integer spyNo = spy.getConnectionNumber();
@@ -131,6 +133,7 @@ public class Slf4jSpyLogDelegator implements SpyLogDelegator {
      * @param returnMsg return value converted to a String for integral types, or String representation for Object.
      * Return types this will be null for void return types.
      */
+    @Override
     public void methodReturned(Spy spy, String methodCall, Object returnMsg, Object object, Object... methodParams) {
         String classType = spy.getClassType();
         Logger logger = ResultSetSpy.classTypeDescription.equals(classType)
@@ -152,6 +155,7 @@ public class Slf4jSpyLogDelegator implements SpyLogDelegator {
      * @param spy the Spy wrapping the class that called the method that returned.
      * @param constructionInfo information about the object construction
      */
+    @Override
     public void constructorReturned(Spy spy, String constructionInfo) {
         // not used in this implementation -- yet
     }
@@ -188,6 +192,7 @@ public class Slf4jSpyLogDelegator implements SpyLogDelegator {
      * @param methodCall a description of the name and call parameters of the method that generated the SQL.
      * @param sql sql that occured.
      */
+    @Override
     public String sqlOccured(Spy spy, String methodCall, String sql) {
         if (!DriverSpy.DumpSqlFilteringOn || shouldSqlBeLogged(sql)) {
             sql = processSql(sql);
@@ -277,6 +282,7 @@ public class Slf4jSpyLogDelegator implements SpyLogDelegator {
      *
      * @param sql SQL that occurred.
      */
+    @Override
     public void sqlTimingOccured(Spy spy, long execTime, String methodCall, String sql) {
         if (sqlTimingLogger.isErrorEnabled()
                 && (!DriverSpy.DumpSqlFilteringOn || shouldSqlBeLogged(sql))) {
@@ -416,6 +422,7 @@ public class Slf4jSpyLogDelegator implements SpyLogDelegator {
      *
      * @param msg message to log.
      */
+    @Override
     public void debug(String msg) {
         debugLogger.debug(msg);
     }
@@ -425,6 +432,7 @@ public class Slf4jSpyLogDelegator implements SpyLogDelegator {
      *
      * @param spy ConnectionSpy that was created.
      */
+    @Override
     public void connectionOpened(Spy spy) {
         if (connectionLogger.isDebugEnabled()) {
             connectionLogger.info(spy.getConnectionNumber() + ". Connection opened "
@@ -440,6 +448,7 @@ public class Slf4jSpyLogDelegator implements SpyLogDelegator {
      *
      * @param spy ConnectionSpy that was closed.
      */
+    @Override
     public void connectionClosed(Spy spy) {
         if (connectionLogger.isDebugEnabled()) {
             connectionLogger.info(spy.getConnectionNumber() + ". Connection closed "

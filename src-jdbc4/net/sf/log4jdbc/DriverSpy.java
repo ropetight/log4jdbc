@@ -494,6 +494,7 @@ public class DriverSpy implements Driver {
      *
      * @return the major version of the JDBC driver.
      */
+    @Override
     public int getMajorVersion() {
         if (lastUnderlyingDriverRequested == null) {
             return 1;
@@ -508,6 +509,7 @@ public class DriverSpy implements Driver {
      *
      * @return the minor version of the JDBC driver.
      */
+    @Override
     public int getMinorVersion() {
         if (lastUnderlyingDriverRequested == null) {
             return 0;
@@ -522,6 +524,7 @@ public class DriverSpy implements Driver {
      *
      * @return <code>true</code> if the underlying driver is JDBC Compliant; <code>false</code> otherwise.
      */
+    @Override
     public boolean jdbcCompliant() {
         return lastUnderlyingDriverRequested != null
                 && lastUnderlyingDriverRequested.jdbcCompliant();
@@ -537,6 +540,7 @@ public class DriverSpy implements Driver {
      *
      * @throws SQLException if a database access error occurs
      */
+    @Override
     public boolean acceptsURL(String url) throws SQLException {
         Driver d = getUnderlyingDriver(url);
         if (d != null) {
@@ -588,6 +592,7 @@ public class DriverSpy implements Driver {
      *
      * @throws SQLException if a database access error occurs
      */
+    @Override
     public Connection connect(String url, Properties info) throws SQLException {
         Driver d = getUnderlyingDriver(url);
         if (d == null) {
@@ -633,6 +638,7 @@ public class DriverSpy implements Driver {
      *
      * @throws SQLException if a database access error occurs
      */
+    @Override
     public DriverPropertyInfo[] getPropertyInfo(String url, Properties info)
             throws SQLException {
         Driver d = getUnderlyingDriver(url);

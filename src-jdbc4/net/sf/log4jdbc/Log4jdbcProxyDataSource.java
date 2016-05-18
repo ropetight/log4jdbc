@@ -97,26 +97,32 @@ public class Log4jdbcProxyDataSource implements DataSource {
         return new ConnectionSpy(connection, DriverSpy.getRdbmsSpecifics(connection));
     }
 
+    @Override
     public int getLoginTimeout() throws SQLException {
         return realDataSource.getLoginTimeout();
     }
 
+    @Override
     public PrintWriter getLogWriter() throws SQLException {
         return realDataSource.getLogWriter();
     }
 
+    @Override
     public boolean isWrapperFor(Class<?> iface) throws SQLException {
         return realDataSource.isWrapperFor(iface);
     }
 
+    @Override
     public void setLoginTimeout(int seconds) throws SQLException {
         realDataSource.setLoginTimeout(seconds);
     }
 
+    @Override
     public void setLogWriter(PrintWriter out) throws SQLException {
         realDataSource.setLogWriter(out);
     }
 
+    @Override
     public <T> T unwrap(Class<T> iface) throws SQLException {
         return realDataSource.unwrap(iface);
     }

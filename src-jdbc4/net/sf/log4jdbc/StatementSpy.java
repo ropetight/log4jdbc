@@ -84,10 +84,12 @@ public class StatementSpy implements Statement, Spy {
         }
     }
 
+    @Override
     public String getClassType() {
         return "Statement";
     }
 
+    @Override
     public Integer getConnectionNumber() {
         return connectionSpy.getConnectionNumber();
     }
@@ -319,6 +321,7 @@ public class StatementSpy implements Statement, Spy {
     }
 
     // implementation of interface methods
+    @Override
     public SQLWarning getWarnings() throws SQLException {
         String methodCall = "getWarnings()";
         try {
@@ -329,6 +332,7 @@ public class StatementSpy implements Statement, Spy {
         }
     }
 
+    @Override
     public int executeUpdate(String sql, String[] columnNames) throws SQLException {
         String methodCall = "executeUpdate(" + sql + ", " + columnNames + ")";
         reportStatementSql(sql, methodCall);
@@ -343,6 +347,7 @@ public class StatementSpy implements Statement, Spy {
         }
     }
 
+    @Override
     public boolean execute(String sql, String[] columnNames) throws SQLException {
         String methodCall = "execute(" + sql + ", " + columnNames + ")";
         reportStatementSql(sql, methodCall);
@@ -357,6 +362,7 @@ public class StatementSpy implements Statement, Spy {
         }
     }
 
+    @Override
     public void setMaxRows(int max) throws SQLException {
         String methodCall = "setMaxRows(" + max + ")";
         try {
@@ -368,6 +374,7 @@ public class StatementSpy implements Statement, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public boolean getMoreResults() throws SQLException {
         String methodCall = "getMoreResults()";
 
@@ -379,6 +386,7 @@ public class StatementSpy implements Statement, Spy {
         }
     }
 
+    @Override
     public void clearWarnings() throws SQLException {
         String methodCall = "clearWarnings()";
         try {
@@ -396,6 +404,7 @@ public class StatementSpy implements Statement, Spy {
      */
     protected List currentBatch = new ArrayList();
 
+    @Override
     public void addBatch(String sql) throws SQLException {
         String methodCall = "addBatch(" + sql + ")";
 
@@ -409,6 +418,7 @@ public class StatementSpy implements Statement, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public int getResultSetType() throws SQLException {
         String methodCall = "getResultSetType()";
         try {
@@ -419,6 +429,7 @@ public class StatementSpy implements Statement, Spy {
         }
     }
 
+    @Override
     public void clearBatch() throws SQLException {
         String methodCall = "clearBatch()";
         try {
@@ -431,6 +442,7 @@ public class StatementSpy implements Statement, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void setFetchDirection(int direction) throws SQLException {
         String methodCall = "setFetchDirection(" + direction + ")";
         try {
@@ -442,6 +454,7 @@ public class StatementSpy implements Statement, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public int[] executeBatch() throws SQLException {
         String methodCall = "executeBatch()";
 
@@ -461,6 +474,7 @@ public class StatementSpy implements Statement, Spy {
         return (int[]) reportReturn(methodCall, updateResults);
     }
 
+    @Override
     public void setFetchSize(int rows) throws SQLException {
         String methodCall = "setFetchSize(" + rows + ")";
         try {
@@ -472,6 +486,7 @@ public class StatementSpy implements Statement, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public int getQueryTimeout() throws SQLException {
         String methodCall = "getQueryTimeout()";
         try {
@@ -482,11 +497,13 @@ public class StatementSpy implements Statement, Spy {
         }
     }
 
+    @Override
     public Connection getConnection() throws SQLException {
         String methodCall = "getConnection()";
         return (Connection) reportReturn(methodCall, connectionSpy);
     }
 
+    @Override
     public ResultSet getGeneratedKeys() throws SQLException {
         String methodCall = "getGeneratedKeys()";
         try {
@@ -504,6 +521,7 @@ public class StatementSpy implements Statement, Spy {
         }
     }
 
+    @Override
     public void setEscapeProcessing(boolean enable) throws SQLException {
         String methodCall = "setEscapeProcessing(" + enable + ")";
         try {
@@ -515,6 +533,7 @@ public class StatementSpy implements Statement, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public int getFetchDirection() throws SQLException {
         String methodCall = "getFetchDirection()";
         try {
@@ -525,6 +544,7 @@ public class StatementSpy implements Statement, Spy {
         }
     }
 
+    @Override
     public void setQueryTimeout(int seconds) throws SQLException {
         String methodCall = "setQueryTimeout(" + seconds + ")";
         try {
@@ -536,6 +556,7 @@ public class StatementSpy implements Statement, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public boolean getMoreResults(int current) throws SQLException {
         String methodCall = "getMoreResults(" + current + ")";
 
@@ -547,6 +568,7 @@ public class StatementSpy implements Statement, Spy {
         }
     }
 
+    @Override
     public ResultSet executeQuery(String sql) throws SQLException {
         String methodCall = "executeQuery(" + sql + ")";
         reportStatementSql(sql, methodCall);
@@ -562,6 +584,7 @@ public class StatementSpy implements Statement, Spy {
         }
     }
 
+    @Override
     public int getMaxFieldSize() throws SQLException {
         String methodCall = "getMaxFieldSize()";
         try {
@@ -572,6 +595,7 @@ public class StatementSpy implements Statement, Spy {
         }
     }
 
+    @Override
     public int executeUpdate(String sql) throws SQLException {
         String methodCall = "executeUpdate(" + sql + ")";
         reportStatementSql(sql, methodCall);
@@ -586,6 +610,7 @@ public class StatementSpy implements Statement, Spy {
         }
     }
 
+    @Override
     public void cancel() throws SQLException {
         String methodCall = "cancel()";
         try {
@@ -597,6 +622,7 @@ public class StatementSpy implements Statement, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void setCursorName(String name) throws SQLException {
         String methodCall = "setCursorName(" + name + ")";
         try {
@@ -608,6 +634,7 @@ public class StatementSpy implements Statement, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public int getFetchSize() throws SQLException {
         String methodCall = "getFetchSize()";
         try {
@@ -618,6 +645,7 @@ public class StatementSpy implements Statement, Spy {
         }
     }
 
+    @Override
     public int getResultSetConcurrency() throws SQLException {
         String methodCall = "getResultSetConcurrency()";
         try {
@@ -628,6 +656,7 @@ public class StatementSpy implements Statement, Spy {
         }
     }
 
+    @Override
     public int getResultSetHoldability() throws SQLException {
         String methodCall = "getResultSetHoldability()";
         try {
@@ -638,6 +667,7 @@ public class StatementSpy implements Statement, Spy {
         }
     }
 
+    @Override
     public boolean isClosed() throws SQLException {
         String methodCall = "isClosed()";
         try {
@@ -648,6 +678,7 @@ public class StatementSpy implements Statement, Spy {
         }
     }
 
+    @Override
     public void setPoolable(boolean poolable) throws SQLException {
         String methodCall = "setPoolable(" + poolable + ")";
         try {
@@ -659,6 +690,7 @@ public class StatementSpy implements Statement, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public boolean isPoolable() throws SQLException {
         String methodCall = "isPoolable()";
         try {
@@ -669,6 +701,7 @@ public class StatementSpy implements Statement, Spy {
         }
     }
 
+    @Override
     public void setMaxFieldSize(int max) throws SQLException {
         String methodCall = "setMaxFieldSize(" + max + ")";
         try {
@@ -680,6 +713,7 @@ public class StatementSpy implements Statement, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public boolean execute(String sql) throws SQLException {
         String methodCall = "execute(" + sql + ")";
         reportStatementSql(sql, methodCall);
@@ -694,6 +728,7 @@ public class StatementSpy implements Statement, Spy {
         }
     }
 
+    @Override
     public int executeUpdate(String sql, int autoGeneratedKeys) throws SQLException {
         String methodCall = "executeUpdate(" + sql + ", " + autoGeneratedKeys + ")";
         reportStatementSql(sql, methodCall);
@@ -708,6 +743,7 @@ public class StatementSpy implements Statement, Spy {
         }
     }
 
+    @Override
     public boolean execute(String sql, int autoGeneratedKeys) throws SQLException {
         String methodCall = "execute(" + sql + ", " + autoGeneratedKeys + ")";
         reportStatementSql(sql, methodCall);
@@ -722,6 +758,7 @@ public class StatementSpy implements Statement, Spy {
         }
     }
 
+    @Override
     public int executeUpdate(String sql, int[] columnIndexes) throws SQLException {
         String methodCall = "executeUpdate(" + sql + ", " + columnIndexes + ")";
         reportStatementSql(sql, methodCall);
@@ -736,6 +773,7 @@ public class StatementSpy implements Statement, Spy {
         }
     }
 
+    @Override
     public boolean execute(String sql, int[] columnIndexes) throws SQLException {
         String methodCall = "execute(" + sql + ", " + columnIndexes + ")";
         reportStatementSql(sql, methodCall);
@@ -750,6 +788,7 @@ public class StatementSpy implements Statement, Spy {
         }
     }
 
+    @Override
     public ResultSet getResultSet() throws SQLException {
         String methodCall = "getResultSet()";
         try {
@@ -765,6 +804,7 @@ public class StatementSpy implements Statement, Spy {
         }
     }
 
+    @Override
     public int getMaxRows() throws SQLException {
         String methodCall = "getMaxRows()";
         try {
@@ -775,6 +815,7 @@ public class StatementSpy implements Statement, Spy {
         }
     }
 
+    @Override
     public void close() throws SQLException {
         String methodCall = "close()";
         try {
@@ -786,6 +827,7 @@ public class StatementSpy implements Statement, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public int getUpdateCount() throws SQLException {
         String methodCall = "getUpdateCount()";
         try {
@@ -796,6 +838,7 @@ public class StatementSpy implements Statement, Spy {
         }
     }
 
+    @Override
     public <T> T unwrap(Class<T> iface) throws SQLException {
         String methodCall = "unwrap(" + (iface == null ? "null" : iface.getName()) + ")";
         try {
@@ -807,6 +850,7 @@ public class StatementSpy implements Statement, Spy {
         }
     }
 
+    @Override
     public boolean isWrapperFor(Class<?> iface) throws SQLException {
         String methodCall = "isWrapperFor(" + (iface == null ? "null" : iface.getName()) + ")";
         try {
