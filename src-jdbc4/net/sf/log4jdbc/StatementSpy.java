@@ -33,7 +33,7 @@ import java.util.Arrays;
  *
  * @author Arthur Blake
  */
-public final class StatementSpy implements Statement, Spy {
+public class StatementSpy implements Statement, Spy {
     /**
      * Running one-off statement sql is generally inefficient and a bad idea for various reasons, so give a warning when
      * this is done.
@@ -862,6 +862,29 @@ public final class StatementSpy implements Statement, Spy {
         try {
             return reportReturn(methodCall, (iface != null && (iface == Statement.class || iface == Spy.class))
                     || realStatement.isWrapperFor(iface));
+        } catch (SQLException s) {
+            reportException(methodCall, s);
+            throw s;
+        }
+    }
+
+    @Override
+    public void closeOnCompletion() throws SQLException {
+        String methodCall = "closeOnCompletion()";
+        try {
+            realStatement.closeOnCompletion();
+        } catch (SQLException s) {
+            reportException(methodCall, s);
+            throw s;
+        }
+        reportReturn(methodCall);    
+    }
+
+    @Override
+    public boolean isCloseOnCompletion() throws SQLException {
+        String methodCall = "isCloseOnCompletion()";
+        try {
+            return reportReturn(methodCall, realStatement.isCloseOnCompletion());
         } catch (SQLException s) {
             reportException(methodCall, s);
             throw s;

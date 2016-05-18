@@ -1536,12 +1536,35 @@ public class ResultSetSpy implements ResultSet, Spy {
             throw s;
         }
     }
+    
+    
+    @Override
+    public <T> T getObject(int columnIndex, Class<T> type) throws SQLException {
+        String methodCall = "getObject(" + columnIndex + ", " + type + ")";
+        try {
+            return (T) reportReturn(methodCall, realResultSet.getObject(columnIndex, type));
+        } catch (SQLException s) {
+            reportException(methodCall, s);
+            throw s;
+        }
+    }    
 
     @Override
     public Object getObject(String columnName) throws SQLException {
         String methodCall = "getObject(" + columnName + ")";
         try {
             return reportReturn(methodCall, realResultSet.getObject(columnName));
+        } catch (SQLException s) {
+            reportException(methodCall, s);
+            throw s;
+        }
+    }
+
+    @Override
+    public <T> T getObject(String columnLabel, Class<T> type) throws SQLException {
+        String methodCall = "getObject(" + columnLabel + ", " + type + ")";
+        try {
+            return (T) reportReturn(methodCall, realResultSet.getObject(columnLabel));
         } catch (SQLException s) {
             reportException(methodCall, s);
             throw s;
@@ -2406,4 +2429,5 @@ public class ResultSetSpy implements ResultSet, Spy {
             throw s;
         }
     }
+
 }
