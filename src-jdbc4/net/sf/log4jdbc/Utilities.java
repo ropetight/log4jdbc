@@ -31,7 +31,7 @@ public class Utilities {
         if (field == null) {
             field = "";
         }
-        StringBuffer output = new StringBuffer();
+        StringBuilder output = new StringBuilder();
         for (int i = 0, j = fieldSize - field.length(); i < j; i++) {
             output.append(' ');
         }
@@ -54,5 +54,8 @@ public class Utilities {
             i--;
         }
         return s.substring(0, i + 1);
+    }
+
+    private Utilities() {
     }
 }

@@ -26,11 +26,6 @@ package net.sf.log4jdbc;
  */
 public class SpyLogFactory {
 
-    /**
-     * Do not allow instantiation. Access is through static method.
-     */
-    private SpyLogFactory() {
-    }
 
     /**
      * The logging system of choice.
@@ -45,5 +40,10 @@ public class SpyLogFactory {
      */
     public static SpyLogDelegator getSpyLogDelegator() {
         return logger;
+    }
+    /**
+     * Do not allow instantiation. Access is through static method.
+     */
+    private SpyLogFactory() {
     }
 }

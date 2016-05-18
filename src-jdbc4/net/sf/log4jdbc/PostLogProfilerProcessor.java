@@ -206,7 +206,7 @@ public class PostLogProfilerProcessor {
         private Long execTime;
         private String sql;
 
-        public ProfiledSql(long msec, String sql) {
+        ProfiledSql(long msec, String sql) {
             this.execTime = new Long(msec);
             this.sql = sql;
         }
@@ -219,6 +219,7 @@ public class PostLogProfilerProcessor {
          *
          * @param o ProfiledSql Object to compare to this ProfiledSql. Must not be null.
          */
+        @Override
         public int compareTo(Object o) {
             return ((ProfiledSql) o).execTime.compareTo(execTime);
         }
@@ -231,6 +232,7 @@ public class PostLogProfilerProcessor {
             return sql;
         }
 
+        @Override
         public String toString() {
             return this.execTime + " msec:  " + this.sql;
         }

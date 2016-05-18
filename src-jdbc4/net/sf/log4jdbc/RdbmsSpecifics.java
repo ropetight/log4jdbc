@@ -27,12 +27,16 @@ import java.text.SimpleDateFormat;
 public class RdbmsSpecifics {
 
     /**
+     *
+     */
+    protected static final String dateFormat = "MM/dd/yyyy HH:mm:ss.SSS";
+
+    /**
      * Default constructor.
      */
     RdbmsSpecifics() {
     }
 
-    protected static final String dateFormat = "MM/dd/yyyy HH:mm:ss.SSS";
 
     /**
      * Format an Object that is being bound to a PreparedStatement parameter, for display. The goal is to reformat the

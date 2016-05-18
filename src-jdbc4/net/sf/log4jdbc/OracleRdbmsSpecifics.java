@@ -30,6 +30,7 @@ class OracleRdbmsSpecifics extends RdbmsSpecifics {
         super();
     }
 
+    @Override
     String formatParameterObject(Object object) {
         if (object instanceof Timestamp) {
             return "to_timestamp('" + new SimpleDateFormat("MM/dd/yyyy HH:mm:ss.SSS").

@@ -34,6 +34,7 @@ import java.sql.SQLXML;
 import java.sql.Statement;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Map;
 
@@ -45,40 +46,16 @@ import java.util.Map;
  * @author Arthur Blake
  */
 public class ResultSetSpy implements ResultSet, Spy {
+    /**
+     * Description for ResultSet class type.
+     */
+    public static final String classTypeDescription = "ResultSet";
 
     private final SpyLogDelegator log;
 
-    /**
-     * Report an exception to be logged.
-     *
-     * @param methodCall description of method call and arguments passed to it that generated the exception.
-     * @param exception exception that was generated
-     */
-    protected void reportException(String methodCall, SQLException exception) {
-        log.exceptionOccured(this, methodCall, exception, null, -1L);
-    }
-
-    /**
-     * Report (for logging) that a method returned. All the other reportReturn methods are conveniance methods that call
-     * this method.
-     *
-     * @param methodCall description of method call and arguments passed to it that returned.
-     * @param msg description of what the return value that was returned. may be an empty String for void return types.
-     */
-    protected void reportAllReturns(String methodCall, String msg) {
-        log.methodReturned(this, methodCall, msg);
-    }
 
     private ResultSet realResultSet;
 
-    /**
-     * Get the real ResultSet that this ResultSetSpy wraps.
-     *
-     * @return the real ResultSet that this ResultSetSpy wraps.
-     */
-    public ResultSet getRealResultSet() {
-        return realResultSet;
-    }
 
     private StatementSpy parent;
 
@@ -99,14 +76,39 @@ public class ResultSetSpy implements ResultSet, Spy {
     }
 
     /**
-     * Description for ResultSet class type.
+     * Report an exception to be logged.
+     *
+     * @param methodCall description of method call and arguments passed to it that generated the exception.
+     * @param exception exception that was generated
      */
-    public static final String classTypeDescription = "ResultSet";
+    protected void reportException(String methodCall, SQLException exception) {
+        log.exceptionOccured(this, methodCall, exception, null, -1L);
+    }
+    /**
+     * Report (for logging) that a method returned. All the other reportReturn methods are conveniance methods that call
+     * this method.
+     *
+     * @param methodCall description of method call and arguments passed to it that returned.
+     * @param msg description of what the return value that was returned. may be an empty String for void return types.
+     */
+    protected void reportAllReturns(String methodCall, String msg) {
+        log.methodReturned(this, methodCall, msg);
+    }
+    /**
+     * Get the real ResultSet that this ResultSetSpy wraps.
+     *
+     * @return the real ResultSet that this ResultSetSpy wraps.
+     */
+    public ResultSet getRealResultSet() {
+        return realResultSet;
+    }
 
+    @Override
     public String getClassType() {
         return classTypeDescription;
     }
 
+    @Override
     public Integer getConnectionNumber() {
         return parent.getConnectionNumber();
     }
@@ -217,6 +219,7 @@ public class ResultSetSpy implements ResultSet, Spy {
     }
 
     // forwarding methods
+    @Override
     public void updateAsciiStream(int columnIndex, InputStream x, int length) throws SQLException {
         String methodCall = "updateAsciiStream(" + columnIndex + ", " + x + ", " + length + ")";
         try {
@@ -228,6 +231,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void updateAsciiStream(String columnName, InputStream x, int length) throws SQLException {
         String methodCall = "updateAsciiStream(" + columnName + ", " + x + ", " + length + ")";
         try {
@@ -239,6 +243,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public int getRow() throws SQLException {
         String methodCall = "getRow()";
         try {
@@ -249,6 +254,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public void cancelRowUpdates() throws SQLException {
         String methodCall = "cancelRowUpdates()";
         try {
@@ -260,6 +266,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public Time getTime(int columnIndex) throws SQLException {
         String methodCall = "getTime(" + columnIndex + ")";
         try {
@@ -270,6 +277,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public Time getTime(String columnName) throws SQLException {
         String methodCall = "getTime(" + columnName + ")";
         try {
@@ -280,6 +288,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public Time getTime(int columnIndex, Calendar cal) throws SQLException {
         String methodCall = "getTime(" + columnIndex + ", " + cal + ")";
         try {
@@ -290,6 +299,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public Time getTime(String columnName, Calendar cal) throws SQLException {
         String methodCall = "getTime(" + columnName + ", " + cal + ")";
         try {
@@ -300,6 +310,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public boolean absolute(int row) throws SQLException {
         String methodCall = "absolute(" + row + ")";
         try {
@@ -310,6 +321,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public Timestamp getTimestamp(int columnIndex) throws SQLException {
         String methodCall = "getTimestamp(" + columnIndex + ")";
         try {
@@ -320,6 +332,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public Timestamp getTimestamp(String columnName) throws SQLException {
         String methodCall = "getTimestamp(" + columnName + ")";
         try {
@@ -331,6 +344,7 @@ public class ResultSetSpy implements ResultSet, Spy {
 
     }
 
+    @Override
     public Timestamp getTimestamp(int columnIndex, Calendar cal) throws SQLException {
         String methodCall = "getTimestamp(" + columnIndex + ", " + cal + ")";
         try {
@@ -342,6 +356,7 @@ public class ResultSetSpy implements ResultSet, Spy {
 
     }
 
+    @Override
     public Timestamp getTimestamp(String columnName, Calendar cal) throws SQLException {
         String methodCall = "getTimestamp(" + columnName + ", " + cal + ")";
         try {
@@ -352,6 +367,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public void moveToInsertRow() throws SQLException {
         String methodCall = "moveToInsertRow()";
         try {
@@ -363,6 +379,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public boolean relative(int rows) throws SQLException {
         String methodCall = "relative(" + rows + ")";
         try {
@@ -373,6 +390,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public boolean previous() throws SQLException {
         String methodCall = "previous()";
         try {
@@ -383,6 +401,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public void moveToCurrentRow() throws SQLException {
         String methodCall = "moveToCurrentRow()";
         try {
@@ -394,6 +413,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public Ref getRef(int i) throws SQLException {
         String methodCall = "getRef(" + i + ")";
         try {
@@ -404,6 +424,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public void updateRef(int columnIndex, Ref x) throws SQLException {
         String methodCall = "updateRef(" + columnIndex + ", " + x + ")";
         try {
@@ -415,6 +436,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public Ref getRef(String colName) throws SQLException {
         String methodCall = "getRef(" + colName + ")";
         try {
@@ -425,6 +447,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public void updateRef(String columnName, Ref x) throws SQLException {
         String methodCall = "updateRef(" + columnName + ", " + x + ")";
         try {
@@ -436,6 +459,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public Blob getBlob(int i) throws SQLException {
         String methodCall = "getBlob(" + i + ")";
         try {
@@ -446,6 +470,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public void updateBlob(int columnIndex, Blob x) throws SQLException {
         String methodCall = "updateBlob(" + columnIndex + ", " + x + ")";
         try {
@@ -457,6 +482,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public Blob getBlob(String colName) throws SQLException {
         String methodCall = "getBlob(" + colName + ")";
         try {
@@ -467,6 +493,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public void updateBlob(String columnName, Blob x) throws SQLException {
         String methodCall = "updateBlob(" + columnName + ", " + x + ")";
         try {
@@ -478,6 +505,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public Clob getClob(int i) throws SQLException {
         String methodCall = "getClob(" + i + ")";
         try {
@@ -488,6 +516,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public void updateClob(int columnIndex, Clob x) throws SQLException {
         String methodCall = "updateClob(" + columnIndex + ", " + x + ")";
         try {
@@ -499,6 +528,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public Clob getClob(String colName) throws SQLException {
         String methodCall = "getClob(" + colName + ")";
         try {
@@ -509,6 +539,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public void updateClob(String columnName, Clob x) throws SQLException {
         String methodCall = "updateClob(" + columnName + ", " + x + ")";
         try {
@@ -520,6 +551,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public boolean getBoolean(int columnIndex) throws SQLException {
         String methodCall = "getBoolean(" + columnIndex + ")";
         try {
@@ -530,6 +562,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public boolean getBoolean(String columnName) throws SQLException {
         String methodCall = "getBoolean(" + columnName + ")";
         try {
@@ -540,6 +573,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public Array getArray(int i) throws SQLException {
         String methodCall = "getArray(" + i + ")";
         try {
@@ -550,6 +584,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public void updateArray(int columnIndex, Array x) throws SQLException {
         String methodCall = "updateArray(" + columnIndex + ", " + x + ")";
         try {
@@ -561,6 +596,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public Array getArray(String colName) throws SQLException {
         String methodCall = "getArray(" + colName + ")";
         try {
@@ -571,6 +607,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public void updateArray(String columnName, Array x) throws SQLException {
         String methodCall = "updateArray(" + columnName + ", " + x + ")";
         try {
@@ -582,6 +619,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public RowId getRowId(int columnIndex) throws SQLException {
         String methodCall = "getRowId(" + columnIndex + ")";
         try {
@@ -592,6 +630,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public RowId getRowId(String columnLabel) throws SQLException {
         String methodCall = "getRowId(" + columnLabel + ")";
         try {
@@ -602,6 +641,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public void updateRowId(int columnIndex, RowId x) throws SQLException {
         String methodCall = "updateRowId(" + columnIndex + ", " + x + ")";
         try {
@@ -613,6 +653,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void updateRowId(String columnLabel, RowId x) throws SQLException {
         String methodCall = "updateRowId(" + columnLabel + ", " + x + ")";
         try {
@@ -624,6 +665,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public int getHoldability() throws SQLException {
         String methodCall = "getHoldability()";
         try {
@@ -634,6 +676,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public boolean isClosed() throws SQLException {
         String methodCall = "isClosed()";
         try {
@@ -644,6 +687,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public void updateNString(int columnIndex, String nString) throws SQLException {
         String methodCall = "updateNString(" + columnIndex + ", " + nString + ")";
         try {
@@ -655,6 +699,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void updateNString(String columnLabel, String nString) throws SQLException {
         String methodCall = "updateNString(" + columnLabel + ", " + nString + ")";
         try {
@@ -666,6 +711,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void updateNClob(int columnIndex, NClob nClob) throws SQLException {
         String methodCall = "updateNClob(" + columnIndex + ", " + nClob + ")";
         try {
@@ -677,6 +723,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void updateNClob(String columnLabel, NClob nClob) throws SQLException {
         String methodCall = "updateNClob(" + columnLabel + ", " + nClob + ")";
         try {
@@ -688,6 +735,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public NClob getNClob(int columnIndex) throws SQLException {
         String methodCall = "getNClob(" + columnIndex + ")";
         try {
@@ -698,6 +746,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public NClob getNClob(String columnLabel) throws SQLException {
         String methodCall = "getNClob(" + columnLabel + ")";
         try {
@@ -708,6 +757,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public SQLXML getSQLXML(int columnIndex) throws SQLException {
         String methodCall = "getSQLXML(" + columnIndex + ")";
         try {
@@ -718,6 +768,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public SQLXML getSQLXML(String columnLabel) throws SQLException {
         String methodCall = "getSQLXML(" + columnLabel + ")";
         try {
@@ -728,6 +779,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public void updateSQLXML(int columnIndex, SQLXML xmlObject) throws SQLException {
         String methodCall = "updateSQLXML(" + columnIndex + ", " + xmlObject + ")";
         try {
@@ -739,6 +791,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void updateSQLXML(String columnLabel, SQLXML xmlObject) throws SQLException {
         String methodCall = "updateSQLXML(" + columnLabel + ", " + xmlObject + ")";
         try {
@@ -750,6 +803,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public String getNString(int columnIndex) throws SQLException {
         String methodCall = "getNString(" + columnIndex + ")";
         try {
@@ -760,6 +814,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public String getNString(String columnLabel) throws SQLException {
         String methodCall = "getNString(" + columnLabel + ")";
         try {
@@ -770,6 +825,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public Reader getNCharacterStream(int columnIndex) throws SQLException {
         String methodCall = "getNCharacterStream(" + columnIndex + ")";
         try {
@@ -780,6 +836,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public Reader getNCharacterStream(String columnLabel) throws SQLException {
         String methodCall = "getNCharacterStream(" + columnLabel + ")";
         try {
@@ -790,6 +847,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public void updateNCharacterStream(int columnIndex, Reader x, long length) throws SQLException {
         String methodCall = "updateNCharacterStream(" + columnIndex + ", " + x + ", " + length + ")";
         try {
@@ -801,6 +859,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void updateNCharacterStream(String columnLabel, Reader reader, long length) throws SQLException {
         String methodCall = "updateNCharacterStream(" + columnLabel + ", " + reader + ", " + length + ")";
         try {
@@ -812,6 +871,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void updateAsciiStream(int columnIndex, InputStream x, long length) throws SQLException {
         String methodCall = "updateAsciiStream(" + columnIndex + ", " + x + ", " + length + ")";
         try {
@@ -823,6 +883,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void updateBinaryStream(int columnIndex, InputStream x, long length) throws SQLException {
         String methodCall = "updateBinaryStream(" + columnIndex + ", " + x + ", " + length + ")";
         try {
@@ -834,6 +895,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void updateCharacterStream(int columnIndex, Reader x, long length) throws SQLException {
         String methodCall = "updateCharacterStream(" + columnIndex + ", " + x + ", " + length + ")";
         try {
@@ -845,6 +907,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void updateAsciiStream(String columnLabel, InputStream x, long length) throws SQLException {
         String methodCall = "updateAsciiStream(" + columnLabel + ", " + x + ", " + length + ")";
         try {
@@ -856,6 +919,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void updateBinaryStream(String columnLabel, InputStream x, long length) throws SQLException {
         String methodCall = "updateBinaryStream(" + columnLabel + ", " + x + ", " + length + ")";
         try {
@@ -867,6 +931,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void updateCharacterStream(String columnLabel, Reader reader, long length) throws SQLException {
         String methodCall = "updateCharacterStream(" + columnLabel + ", " + reader + ", " + length + ")";
         try {
@@ -878,6 +943,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void updateBlob(int columnIndex, InputStream inputStream, long length) throws SQLException {
         String methodCall = "updateBlob(" + columnIndex + ", " + inputStream + ", " + length + ")";
         try {
@@ -889,6 +955,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void updateBlob(String columnLabel, InputStream inputStream, long length) throws SQLException {
         String methodCall = "updateBlob(" + columnLabel + ", " + inputStream + ", " + length + ")";
         try {
@@ -900,6 +967,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void updateClob(int columnIndex, Reader reader, long length) throws SQLException {
         String methodCall = "updateClob(" + columnIndex + ", " + reader + ", " + length + ")";
         try {
@@ -911,6 +979,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void updateClob(String columnLabel, Reader reader, long length) throws SQLException {
         String methodCall = "updateClob(" + columnLabel + ", " + reader + ", " + length + ")";
         try {
@@ -922,6 +991,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void updateNClob(int columnIndex, Reader reader, long length) throws SQLException {
         String methodCall = "updateNClob(" + columnIndex + ", " + reader + ", " + length + ")";
         try {
@@ -933,6 +1003,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void updateNClob(String columnLabel, Reader reader, long length) throws SQLException {
         String methodCall = "updateNClob(" + columnLabel + ", " + reader + ", " + length + ")";
         try {
@@ -944,6 +1015,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void updateNCharacterStream(int columnIndex, Reader reader) throws SQLException {
         String methodCall = "updateNCharacterStream(" + columnIndex + ", " + reader + ")";
         try {
@@ -955,6 +1027,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void updateNCharacterStream(String columnLabel, Reader reader) throws SQLException {
         String methodCall = "updateNCharacterStream(" + columnLabel + ", " + reader + ")";
         try {
@@ -966,6 +1039,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void updateAsciiStream(int columnIndex, InputStream x) throws SQLException {
         String methodCall = "updateAsciiStream(" + columnIndex + ", " + x + ")";
         try {
@@ -977,6 +1051,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void updateBinaryStream(int columnIndex, InputStream x) throws SQLException {
         String methodCall = "updateBinaryStream(" + columnIndex + ", " + x + ")";
         try {
@@ -988,6 +1063,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void updateCharacterStream(int columnIndex, Reader x) throws SQLException {
         String methodCall = "updateCharacterStream(" + columnIndex + ", " + x + ")";
         try {
@@ -999,6 +1075,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void updateAsciiStream(String columnLabel, InputStream x) throws SQLException {
         String methodCall = "updateAsciiStream(" + columnLabel + ", " + x + ")";
         try {
@@ -1010,6 +1087,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void updateBinaryStream(String columnLabel, InputStream x) throws SQLException {
         String methodCall = "updateBinaryStream(" + columnLabel + ", " + x + ")";
         try {
@@ -1021,6 +1099,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void updateCharacterStream(String columnLabel, Reader reader) throws SQLException {
         String methodCall = "updateCharacterStream(" + columnLabel + ", " + reader + ")";
         try {
@@ -1032,6 +1111,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void updateBlob(int columnIndex, InputStream inputStream) throws SQLException {
         String methodCall = "updateBlob(" + columnIndex + ", " + inputStream + ")";
         try {
@@ -1043,6 +1123,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void updateBlob(String columnLabel, InputStream inputStream) throws SQLException {
         String methodCall = "updateBlob(" + columnLabel + ", " + inputStream + ")";
         try {
@@ -1054,6 +1135,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void updateClob(int columnIndex, Reader reader) throws SQLException {
         String methodCall = "updateClob(" + columnIndex + ", " + reader + ")";
         try {
@@ -1065,6 +1147,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void updateClob(String columnLabel, Reader reader) throws SQLException {
         String methodCall = "updateClob(" + columnLabel + ", " + reader + ")";
         try {
@@ -1076,6 +1159,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void updateNClob(int columnIndex, Reader reader) throws SQLException {
         String methodCall = "updateNClob(" + columnIndex + ", " + reader + ")";
         try {
@@ -1087,6 +1171,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void updateNClob(String columnLabel, Reader reader) throws SQLException {
         String methodCall = "updateNClob(" + columnLabel + ", " + reader + ")";
         try {
@@ -1098,6 +1183,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public boolean isBeforeFirst() throws SQLException {
         String methodCall = "isBeforeFirst()";
         try {
@@ -1108,6 +1194,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public short getShort(int columnIndex) throws SQLException {
         String methodCall = "getShort(" + columnIndex + ")";
         try {
@@ -1118,6 +1205,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public short getShort(String columnName) throws SQLException {
         String methodCall = "getShort(" + columnName + ")";
         try {
@@ -1128,6 +1216,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public int getInt(int columnIndex) throws SQLException {
         String methodCall = "getInt(" + columnIndex + ")";
         try {
@@ -1138,6 +1227,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public int getInt(String columnName) throws SQLException {
         String methodCall = "getInt(" + columnName + ")";
         try {
@@ -1148,6 +1238,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public void close() throws SQLException {
         String methodCall = "close()";
         try {
@@ -1159,6 +1250,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public ResultSetMetaData getMetaData() throws SQLException {
         String methodCall = "getMetaData()";
         try {
@@ -1169,6 +1261,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public int getType() throws SQLException {
         String methodCall = "getType()";
         try {
@@ -1179,6 +1272,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public double getDouble(int columnIndex) throws SQLException {
         String methodCall = "getDouble(" + columnIndex + ")";
         try {
@@ -1189,6 +1283,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public double getDouble(String columnName) throws SQLException {
         String methodCall = "getDouble(" + columnName + ")";
         try {
@@ -1199,6 +1294,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public void deleteRow() throws SQLException {
         String methodCall = "deleteRow()";
         try {
@@ -1210,6 +1306,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public int getConcurrency() throws SQLException {
         String methodCall = "getConcurrency()";
         try {
@@ -1220,6 +1317,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public boolean rowUpdated() throws SQLException {
         String methodCall = "rowUpdated()";
         try {
@@ -1230,6 +1328,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public Date getDate(int columnIndex) throws SQLException {
         String methodCall = "getDate(" + columnIndex + ")";
         try {
@@ -1240,6 +1339,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public Date getDate(String columnName) throws SQLException {
         String methodCall = "getDate(" + columnName + ")";
         try {
@@ -1250,6 +1350,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public Date getDate(int columnIndex, Calendar cal) throws SQLException {
         String methodCall = "getDate(" + columnIndex + ", " + cal + ")";
         try {
@@ -1261,6 +1362,7 @@ public class ResultSetSpy implements ResultSet, Spy {
 
     }
 
+    @Override
     public Date getDate(String columnName, Calendar cal) throws SQLException {
         String methodCall = "getDate(" + columnName + ", " + cal + ")";
         try {
@@ -1271,6 +1373,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public boolean last() throws SQLException {
         String methodCall = "last()";
         try {
@@ -1281,6 +1384,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public boolean rowInserted() throws SQLException {
         String methodCall = "rowInserted()";
         try {
@@ -1291,6 +1395,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public boolean rowDeleted() throws SQLException {
         String methodCall = "rowDeleted()";
         try {
@@ -1301,6 +1406,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public void updateNull(int columnIndex) throws SQLException {
         String methodCall = "updateNull(" + columnIndex + ")";
         try {
@@ -1312,6 +1418,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void updateNull(String columnName) throws SQLException {
         String methodCall = "updateNull(" + columnName + ")";
         try {
@@ -1323,6 +1430,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void updateShort(int columnIndex, short x) throws SQLException {
         String methodCall = "updateShort(" + columnIndex + ", " + x + ")";
         try {
@@ -1334,6 +1442,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void updateShort(String columnName, short x) throws SQLException {
         String methodCall = "updateShort(" + columnName + ", " + x + ")";
         try {
@@ -1345,6 +1454,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void updateBoolean(int columnIndex, boolean x) throws SQLException {
         String methodCall = "updateBoolean(" + columnIndex + ", " + x + ")";
         try {
@@ -1356,6 +1466,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void updateBoolean(String columnName, boolean x) throws SQLException {
         String methodCall = "updateBoolean(" + columnName + ", " + x + ")";
         try {
@@ -1367,6 +1478,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void updateByte(int columnIndex, byte x) throws SQLException {
         String methodCall = "updateByte(" + columnIndex + ", " + x + ")";
         try {
@@ -1378,6 +1490,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void updateByte(String columnName, byte x) throws SQLException {
         String methodCall = "updateByte(" + columnName + ", " + x + ")";
         try {
@@ -1389,6 +1502,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void updateInt(int columnIndex, int x) throws SQLException {
         String methodCall = "updateInt(" + columnIndex + ", " + x + ")";
         try {
@@ -1400,6 +1514,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void updateInt(String columnName, int x) throws SQLException {
         String methodCall = "updateInt(" + columnName + ", " + x + ")";
         try {
@@ -1411,6 +1526,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public Object getObject(int columnIndex) throws SQLException {
         String methodCall = "getObject(" + columnIndex + ")";
         try {
@@ -1421,6 +1537,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public Object getObject(String columnName) throws SQLException {
         String methodCall = "getObject(" + columnName + ")";
         try {
@@ -1431,6 +1548,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public Object getObject(String colName, Map map) throws SQLException {
         String methodCall = "getObject(" + colName + ", " + map + ")";
         try {
@@ -1441,6 +1559,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public boolean next() throws SQLException {
         String methodCall = "next()";
         try {
@@ -1451,6 +1570,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public void updateLong(int columnIndex, long x) throws SQLException {
         String methodCall = "updateLong(" + columnIndex + ", " + x + ")";
         try {
@@ -1462,6 +1582,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void updateLong(String columnName, long x) throws SQLException {
         String methodCall = "updateLong(" + columnName + ", " + x + ")";
         try {
@@ -1473,6 +1594,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void updateFloat(int columnIndex, float x) throws SQLException {
         String methodCall = "updateFloat(" + columnIndex + ", " + x + ")";
         try {
@@ -1485,6 +1607,7 @@ public class ResultSetSpy implements ResultSet, Spy {
 
     }
 
+    @Override
     public void updateFloat(String columnName, float x) throws SQLException {
         String methodCall = "updateFloat(" + columnName + ", " + x + ")";
         try {
@@ -1496,6 +1619,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void updateDouble(int columnIndex, double x) throws SQLException {
         String methodCall = "updateDouble(" + columnIndex + ", " + x + ")";
         try {
@@ -1507,6 +1631,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void updateDouble(String columnName, double x) throws SQLException {
         String methodCall = "updateDouble(" + columnName + ", " + x + ")";
         try {
@@ -1518,11 +1643,13 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public Statement getStatement() throws SQLException {
         String methodCall = "getStatement()";
         return (Statement) reportReturn(methodCall, parent);
     }
 
+    @Override
     public Object getObject(int columnIndex, Map<String, Class<?>> map) throws SQLException {
         String methodCall = "getObject(" + columnIndex + ", " + map + ")";
         try {
@@ -1533,6 +1660,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public void updateString(int columnIndex, String x) throws SQLException {
         String methodCall = "updateString(" + columnIndex + ", " + x + ")";
         try {
@@ -1544,6 +1672,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void updateString(String columnName, String x) throws SQLException {
         String methodCall = "updateString(" + columnName + ", " + x + ")";
         try {
@@ -1555,6 +1684,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public InputStream getAsciiStream(int columnIndex) throws SQLException {
         String methodCall = "getAsciiStream(" + columnIndex + ")";
         try {
@@ -1565,6 +1695,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public InputStream getAsciiStream(String columnName) throws SQLException {
         String methodCall = "getAsciiStream(" + columnName + ")";
         try {
@@ -1575,6 +1706,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public void updateBigDecimal(int columnIndex, BigDecimal x) throws SQLException {
         String methodCall = "updateBigDecimal(" + columnIndex + ", " + x + ")";
         try {
@@ -1586,6 +1718,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public URL getURL(int columnIndex) throws SQLException {
         String methodCall = "getURL(" + columnIndex + ")";
         try {
@@ -1596,6 +1729,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public void updateBigDecimal(String columnName, BigDecimal x) throws SQLException {
         String methodCall = "updateBigDecimal(" + columnName + ", " + x + ")";
         try {
@@ -1607,6 +1741,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public URL getURL(String columnName) throws SQLException {
         String methodCall = "getURL(" + columnName + ")";
         try {
@@ -1617,9 +1752,10 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public void updateBytes(int columnIndex, byte[] x) throws SQLException {
         // todo: dump array?
-        String methodCall = "updateBytes(" + columnIndex + ", " + x + ")";
+        String methodCall = "updateBytes(" + columnIndex + ", " + Arrays.toString(x) + ")";
         try {
             realResultSet.updateBytes(columnIndex, x);
         } catch (SQLException s) {
@@ -1629,9 +1765,10 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void updateBytes(String columnName, byte[] x) throws SQLException {
         // todo: dump array?
-        String methodCall = "updateBytes(" + columnName + ", " + x + ")";
+        String methodCall = "updateBytes(" + columnName + ", " + Arrays.toString(x) + ")";
         try {
             realResultSet.updateBytes(columnName, x);
         } catch (SQLException s) {
@@ -1644,6 +1781,7 @@ public class ResultSetSpy implements ResultSet, Spy {
     /**
      * @deprecated
      */
+    @Override
     public InputStream getUnicodeStream(int columnIndex) throws SQLException {
         String methodCall = "getUnicodeStream(" + columnIndex + ")";
         try {
@@ -1655,8 +1793,10 @@ public class ResultSetSpy implements ResultSet, Spy {
     }
 
     /**
+     * @param columnName
      * @deprecated
      */
+    @Override
     public InputStream getUnicodeStream(String columnName) throws SQLException {
         String methodCall = "getUnicodeStream(" + columnName + ")";
         try {
@@ -1667,6 +1807,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public void updateDate(int columnIndex, Date x) throws SQLException {
         String methodCall = "updateDate(" + columnIndex + ", " + x + ")";
         try {
@@ -1677,6 +1818,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public void updateDate(String columnName, Date x) throws SQLException {
         String methodCall = "updateDate(" + columnName + ", " + x + ")";
         try {
@@ -1688,6 +1830,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public int getFetchSize() throws SQLException {
         String methodCall = "getFetchSize()";
         try {
@@ -1698,6 +1841,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public SQLWarning getWarnings() throws SQLException {
         String methodCall = "getWarnings()";
         try {
@@ -1708,6 +1852,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public InputStream getBinaryStream(int columnIndex) throws SQLException {
         String methodCall = "getBinaryStream(" + columnIndex + ")";
         try {
@@ -1718,6 +1863,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public InputStream getBinaryStream(String columnName) throws SQLException {
         String methodCall = "getBinaryStream(" + columnName + ")";
         try {
@@ -1728,6 +1874,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public void clearWarnings() throws SQLException {
         String methodCall = "clearWarnings()";
         try {
@@ -1739,6 +1886,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void updateTimestamp(int columnIndex, Timestamp x) throws SQLException {
         String methodCall = "updateTimestamp(" + columnIndex + ", " + x + ")";
         try {
@@ -1750,6 +1898,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void updateTimestamp(String columnName, Timestamp x) throws SQLException {
         String methodCall = "updateTimestamp(" + columnName + ", " + x + ")";
         try {
@@ -1761,6 +1910,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public boolean first() throws SQLException {
         String methodCall = "first()";
         try {
@@ -1771,6 +1921,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public String getCursorName() throws SQLException {
         String methodCall = "getCursorName()";
         try {
@@ -1781,6 +1932,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public int findColumn(String columnName) throws SQLException {
         String methodCall = "findColumn(" + columnName + ")";
         try {
@@ -1791,6 +1943,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public boolean wasNull() throws SQLException {
         String methodCall = "wasNull()";
         try {
@@ -1801,6 +1954,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public void updateBinaryStream(int columnIndex, InputStream x, int length) throws SQLException {
         String methodCall = "updateBinaryStream(" + columnIndex + ", " + x + ", " + length + ")";
         try {
@@ -1812,6 +1966,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void updateBinaryStream(String columnName, InputStream x, int length) throws SQLException {
         String methodCall = "updateBinaryStream(" + columnName + ", " + x + ", " + length + ")";
         try {
@@ -1823,6 +1978,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public String getString(int columnIndex) throws SQLException {
         String methodCall = "getString(" + columnIndex + ")";
         try {
@@ -1833,6 +1989,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public String getString(String columnName) throws SQLException {
         String methodCall = "getString(" + columnName + ")";
         try {
@@ -1843,6 +2000,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public Reader getCharacterStream(int columnIndex) throws SQLException {
         String methodCall = "getCharacterStream(" + columnIndex + ")";
         try {
@@ -1853,6 +2011,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public Reader getCharacterStream(String columnName) throws SQLException {
         String methodCall = "getCharacterStream(" + columnName + ")";
         try {
@@ -1863,6 +2022,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public void setFetchDirection(int direction) throws SQLException {
         String methodCall = "setFetchDirection(" + direction + ")";
         try {
@@ -1874,6 +2034,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void updateCharacterStream(int columnIndex, Reader x, int length) throws SQLException {
         String methodCall = "updateCharacterStream(" + columnIndex + ", " + x + ", " + length + ")";
         try {
@@ -1885,6 +2046,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void updateCharacterStream(String columnName, Reader reader, int length) throws SQLException {
         String methodCall = "updateCharacterStream(" + columnName + ", " + reader + ", " + length + ")";
         try {
@@ -1896,6 +2058,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public byte getByte(int columnIndex) throws SQLException {
         String methodCall = "getByte(" + columnIndex + ")";
         try {
@@ -1906,6 +2069,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public byte getByte(String columnName) throws SQLException {
         String methodCall = "getByte(" + columnName + ")";
         try {
@@ -1916,6 +2080,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public void updateTime(int columnIndex, Time x) throws SQLException {
         String methodCall = "updateTime(" + columnIndex + ", " + x + ")";
         try {
@@ -1927,6 +2092,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void updateTime(String columnName, Time x) throws SQLException {
         String methodCall = "updateTime(" + columnName + ", " + x + ")";
         try {
@@ -1938,6 +2104,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public byte[] getBytes(int columnIndex) throws SQLException {
         String methodCall = "getBytes(" + columnIndex + ")";
         try {
@@ -1948,6 +2115,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public byte[] getBytes(String columnName) throws SQLException {
         String methodCall = "getBytes(" + columnName + ")";
         try {
@@ -1958,6 +2126,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public boolean isAfterLast() throws SQLException {
         String methodCall = "isAfterLast()";
         try {
@@ -1968,6 +2137,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public void updateObject(int columnIndex, Object x, int scale) throws SQLException {
         String methodCall = "updateObject(" + columnIndex + ", " + x + ", " + scale + ")";
         try {
@@ -1979,6 +2149,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void updateObject(int columnIndex, Object x) throws SQLException {
         String methodCall = "updateObject(" + columnIndex + ", " + x + ")";
         try {
@@ -1990,6 +2161,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void updateObject(String columnName, Object x, int scale) throws SQLException {
         String methodCall = "updateObject(" + columnName + ", " + x + ", " + scale + ")";
         try {
@@ -2001,6 +2173,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void updateObject(String columnName, Object x) throws SQLException {
         String methodCall = "updateObject(" + columnName + ", " + x + ")";
         try {
@@ -2012,6 +2185,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public int getFetchDirection() throws SQLException {
         String methodCall = "getFetchDirection()";
         try {
@@ -2022,6 +2196,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public long getLong(int columnIndex) throws SQLException {
         String methodCall = "getLong(" + columnIndex + ")";
         try {
@@ -2032,6 +2207,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public long getLong(String columnName) throws SQLException {
         String methodCall = "getLong(" + columnName + ")";
         try {
@@ -2042,6 +2218,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public boolean isFirst() throws SQLException {
         String methodCall = "isFirst()";
         try {
@@ -2052,6 +2229,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public void insertRow() throws SQLException {
         String methodCall = "insertRow()";
         try {
@@ -2062,6 +2240,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public float getFloat(int columnIndex) throws SQLException {
         String methodCall = "getFloat(" + columnIndex + ")";
         try {
@@ -2072,6 +2251,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public float getFloat(String columnName) throws SQLException {
         String methodCall = "getFloat(" + columnName + ")";
         try {
@@ -2082,6 +2262,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public boolean isLast() throws SQLException {
         String methodCall = "isLast()";
         try {
@@ -2092,6 +2273,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public void setFetchSize(int rows) throws SQLException {
         String methodCall = "setFetchSize(" + rows + ")";
         try {
@@ -2103,6 +2285,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void updateRow() throws SQLException {
         String methodCall = "updateRow()";
         try {
@@ -2114,6 +2297,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void beforeFirst() throws SQLException {
         String methodCall = "beforeFirst()";
         try {
@@ -2128,6 +2312,7 @@ public class ResultSetSpy implements ResultSet, Spy {
     /**
      * @deprecated
      */
+    @Override
     public BigDecimal getBigDecimal(int columnIndex, int scale) throws SQLException {
         String methodCall = "getBigDecimal(" + columnIndex + ", " + scale + ")";
         try {
@@ -2139,8 +2324,10 @@ public class ResultSetSpy implements ResultSet, Spy {
     }
 
     /**
+     * @param columnName
      * @deprecated
      */
+    @Override
     public BigDecimal getBigDecimal(String columnName, int scale) throws SQLException {
         String methodCall = "getBigDecimal(" + columnName + ", " + scale + ")";
         try {
@@ -2151,6 +2338,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public BigDecimal getBigDecimal(int columnIndex) throws SQLException {
         String methodCall = "getBigDecimal(" + columnIndex + ")";
         try {
@@ -2161,6 +2349,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public BigDecimal getBigDecimal(String columnName) throws SQLException {
         String methodCall = "getBigDecimal(" + columnName + ")";
         try {
@@ -2171,6 +2360,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public void afterLast() throws SQLException {
         String methodCall = "afterLast()";
         try {
@@ -2182,6 +2372,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void refreshRow() throws SQLException {
         String methodCall = "refreshRow()";
         try {
@@ -2192,6 +2383,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public <T> T unwrap(Class<T> iface) throws SQLException {
         String methodCall = "unwrap(" + (iface == null ? "null" : iface.getName()) + ")";
         try {
@@ -2203,6 +2395,7 @@ public class ResultSetSpy implements ResultSet, Spy {
         }
     }
 
+    @Override
     public boolean isWrapperFor(Class<?> iface) throws SQLException {
         String methodCall = "isWrapperFor(" + (iface == null ? "null" : iface.getName()) + ")";
         try {

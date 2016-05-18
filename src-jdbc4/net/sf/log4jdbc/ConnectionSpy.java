@@ -46,23 +46,7 @@ import java.util.Set;
  * @author Arthur Blake
  */
 public class ConnectionSpy implements Connection, Spy {
-
-    private Connection realConnection;
-
-    /**
-     * Get the real underlying Connection that this ConnectionSpy wraps.
-     *
-     * @return the real underlying Connection.
-     */
-    public Connection getRealConnection() {
-        return realConnection;
-    }
-
-    private SpyLogDelegator log;
-
-    private final Integer connectionNumber;
     private static int lastConnectionNumber = 0;
-
     /**
      * Contains a Mapping of connectionNumber to currently open ConnectionSpy objects.
      */
@@ -74,7 +58,7 @@ public class ConnectionSpy implements Connection, Spy {
      * @return an open connection dump.
      */
     public static String getOpenConnectionsDump() {
-        StringBuffer dump = new StringBuffer();
+        StringBuilder dump = new StringBuilder();
         int size;
         Integer[] keysArr;
         synchronized (connectionTracker) {
@@ -85,20 +69,26 @@ public class ConnectionSpy implements Connection, Spy {
             Set keys = connectionTracker.keySet();
             keysArr = (Integer[]) keys.toArray(new Integer[keys.size()]);
         }
-
         Arrays.sort(keysArr);
-
         dump.append("open connections:  ");
         for (int i = 0; i < keysArr.length; i++) {
             dump.append(keysArr[i]);
             dump.append(" ");
         }
-
         dump.append("(");
         dump.append(size);
         dump.append(")");
         return dump.toString();
     }
+
+    private Connection realConnection;
+
+
+    private SpyLogDelegator log;
+
+    private final Integer connectionNumber;
+    private RdbmsSpecifics rdbmsSpecifics;
+
 
     /**
      * Create a new ConnectionSpy that wraps a given Connection.
@@ -134,7 +124,14 @@ public class ConnectionSpy implements Connection, Spy {
         reportReturn("new Connection");
     }
 
-    private RdbmsSpecifics rdbmsSpecifics;
+    /**
+     * Get the real underlying Connection that this ConnectionSpy wraps.
+     *
+     * @return the real underlying Connection.
+     */
+    public Connection getRealConnection() {
+        return realConnection;
+    }
 
     /**
      * Set the RdbmsSpecifics object for formatting logging appropriate for the Rdbms used on this connection.
@@ -154,22 +151,40 @@ public class ConnectionSpy implements Connection, Spy {
         return rdbmsSpecifics;
     }
 
+    @Override
     public Integer getConnectionNumber() {
         return connectionNumber;
     }
 
+    @Override
     public String getClassType() {
         return "Connection";
     }
 
+    /**
+     *
+     * @param methodCall
+     * @param exception
+     * @param sql
+     */
     protected void reportException(String methodCall, SQLException exception, String sql) {
         log.exceptionOccured(this, methodCall, exception, sql, -1L);
     }
 
+    /**
+     *
+     * @param methodCall
+     * @param exception
+     */
     protected void reportException(String methodCall, SQLException exception) {
         log.exceptionOccured(this, methodCall, exception, null, -1L);
     }
 
+    /**
+     *
+     * @param methodCall
+     * @param returnValue
+     */
     protected void reportAllReturns(String methodCall, String returnValue) {
         log.methodReturned(this, methodCall, returnValue);
     }
@@ -194,6 +209,7 @@ public class ConnectionSpy implements Connection, Spy {
     }
 
     // forwarding methods
+    @Override
     public boolean isClosed() throws SQLException {
         String methodCall = "isClosed()";
         try {
@@ -204,6 +220,7 @@ public class ConnectionSpy implements Connection, Spy {
         }
     }
 
+    @Override
     public SQLWarning getWarnings() throws SQLException {
         String methodCall = "getWarnings()";
         try {
@@ -214,6 +231,7 @@ public class ConnectionSpy implements Connection, Spy {
         }
     }
 
+    @Override
     public Savepoint setSavepoint() throws SQLException {
         String methodCall = "setSavepoint()";
         try {
@@ -224,6 +242,7 @@ public class ConnectionSpy implements Connection, Spy {
         }
     }
 
+    @Override
     public void releaseSavepoint(Savepoint savepoint) throws SQLException {
         String methodCall = "releaseSavepoint(" + savepoint + ")";
         try {
@@ -235,6 +254,7 @@ public class ConnectionSpy implements Connection, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void rollback(Savepoint savepoint) throws SQLException {
         String methodCall = "rollback(" + savepoint + ")";
         try {
@@ -246,6 +266,7 @@ public class ConnectionSpy implements Connection, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public DatabaseMetaData getMetaData() throws SQLException {
         String methodCall = "getMetaData()";
         try {
@@ -256,6 +277,7 @@ public class ConnectionSpy implements Connection, Spy {
         }
     }
 
+    @Override
     public void clearWarnings() throws SQLException {
         String methodCall = "clearWarnings()";
         try {
@@ -267,6 +289,7 @@ public class ConnectionSpy implements Connection, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public Statement createStatement() throws SQLException {
         String methodCall = "createStatement()";
         try {
@@ -278,6 +301,7 @@ public class ConnectionSpy implements Connection, Spy {
         }
     }
 
+    @Override
     public Statement createStatement(int resultSetType, int resultSetConcurrency) throws SQLException {
         String methodCall = "createStatement(" + resultSetType + ", " + resultSetConcurrency + ")";
         try {
@@ -289,6 +313,7 @@ public class ConnectionSpy implements Connection, Spy {
         }
     }
 
+    @Override
     public Statement createStatement(int resultSetType, int resultSetConcurrency, int resultSetHoldability) throws SQLException {
         String methodCall = "createStatement(" + resultSetType + ", " + resultSetConcurrency + ", " + resultSetHoldability + ")";
         try {
@@ -301,6 +326,7 @@ public class ConnectionSpy implements Connection, Spy {
         }
     }
 
+    @Override
     public void setReadOnly(boolean readOnly) throws SQLException {
         String methodCall = "setReadOnly(" + readOnly + ")";
         try {
@@ -312,6 +338,7 @@ public class ConnectionSpy implements Connection, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public PreparedStatement prepareStatement(String sql) throws SQLException {
         String methodCall = "prepareStatement(" + sql + ")";
         try {
@@ -323,6 +350,7 @@ public class ConnectionSpy implements Connection, Spy {
         }
     }
 
+    @Override
     public PreparedStatement prepareStatement(String sql, int autoGeneratedKeys) throws SQLException {
         String methodCall = "prepareStatement(" + sql + ", " + autoGeneratedKeys + ")";
         try {
@@ -334,6 +362,7 @@ public class ConnectionSpy implements Connection, Spy {
         }
     }
 
+    @Override
     public PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency) throws SQLException {
         String methodCall = "prepareStatement(" + sql + ", " + resultSetType + ", " + resultSetConcurrency + ")";
         try {
@@ -345,6 +374,7 @@ public class ConnectionSpy implements Connection, Spy {
         }
     }
 
+    @Override
     public PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency,
             int resultSetHoldability) throws SQLException {
         String methodCall = "prepareStatement(" + sql + ", " + resultSetType + ", " + resultSetConcurrency + ", " + resultSetHoldability + ")";
@@ -358,9 +388,10 @@ public class ConnectionSpy implements Connection, Spy {
         }
     }
 
+    @Override
     public PreparedStatement prepareStatement(String sql, int columnIndexes[]) throws SQLException {
         //todo: dump the array here?
-        String methodCall = "prepareStatement(" + sql + ", " + columnIndexes + ")";
+        String methodCall = "prepareStatement(" + sql + ", " + Arrays.toString(columnIndexes) + ")";
         try {
             PreparedStatement statement = realConnection.prepareStatement(sql, columnIndexes);
             return (PreparedStatement) reportReturn(methodCall, new PreparedStatementSpy(sql, this, statement));
@@ -370,6 +401,7 @@ public class ConnectionSpy implements Connection, Spy {
         }
     }
 
+    @Override
     public Savepoint setSavepoint(String name) throws SQLException {
         String methodCall = "setSavepoint(" + name + ")";
         try {
@@ -380,9 +412,10 @@ public class ConnectionSpy implements Connection, Spy {
         }
     }
 
+    @Override
     public PreparedStatement prepareStatement(String sql, String columnNames[]) throws SQLException {
         //todo: dump the array here?
-        String methodCall = "prepareStatement(" + sql + ", " + columnNames + ")";
+        String methodCall = "prepareStatement(" + sql + ", " + Arrays.toString(columnNames) + ")";
         try {
             PreparedStatement statement = realConnection.prepareStatement(sql, columnNames);
             return (PreparedStatement) reportReturn(methodCall, new PreparedStatementSpy(sql, this, statement));
@@ -392,6 +425,7 @@ public class ConnectionSpy implements Connection, Spy {
         }
     }
 
+    @Override
     public Clob createClob() throws SQLException {
         String methodCall = "createClob()";
         try {
@@ -402,6 +436,7 @@ public class ConnectionSpy implements Connection, Spy {
         }
     }
 
+    @Override
     public Blob createBlob() throws SQLException {
         String methodCall = "createBlob()";
         try {
@@ -412,6 +447,7 @@ public class ConnectionSpy implements Connection, Spy {
         }
     }
 
+    @Override
     public NClob createNClob() throws SQLException {
         String methodCall = "createNClob()";
         try {
@@ -422,6 +458,7 @@ public class ConnectionSpy implements Connection, Spy {
         }
     }
 
+    @Override
     public SQLXML createSQLXML() throws SQLException {
         String methodCall = "createSQLXML()";
         try {
@@ -432,6 +469,7 @@ public class ConnectionSpy implements Connection, Spy {
         }
     }
 
+    @Override
     public boolean isValid(int timeout) throws SQLException {
         String methodCall = "isValid(" + timeout + ")";
         try {
@@ -442,6 +480,7 @@ public class ConnectionSpy implements Connection, Spy {
         }
     }
 
+    @Override
     public void setClientInfo(String name, String value) throws SQLClientInfoException {
         String methodCall = "setClientInfo(" + name + ", " + value + ")";
         try {
@@ -453,6 +492,7 @@ public class ConnectionSpy implements Connection, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void setClientInfo(Properties properties) throws SQLClientInfoException {
         // todo: dump properties?
         String methodCall = "setClientInfo(" + properties + ")";
@@ -465,6 +505,7 @@ public class ConnectionSpy implements Connection, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public String getClientInfo(String name) throws SQLException {
         String methodCall = "getClientInfo(" + name + ")";
         try {
@@ -475,6 +516,7 @@ public class ConnectionSpy implements Connection, Spy {
         }
     }
 
+    @Override
     public Properties getClientInfo() throws SQLException {
         String methodCall = "getClientInfo()";
         try {
@@ -485,9 +527,10 @@ public class ConnectionSpy implements Connection, Spy {
         }
     }
 
+    @Override
     public Array createArrayOf(String typeName, Object[] elements) throws SQLException {
         //todo: dump elements?
-        String methodCall = "createArrayOf(" + typeName + ", " + elements + ")";
+        String methodCall = "createArrayOf(" + typeName + ", " + Arrays.toString(elements) + ")";
         try {
             return (Array) reportReturn(methodCall, realConnection.createArrayOf(typeName, elements));
         } catch (SQLException s) {
@@ -496,9 +539,10 @@ public class ConnectionSpy implements Connection, Spy {
         }
     }
 
+    @Override
     public Struct createStruct(String typeName, Object[] attributes) throws SQLException {
         //todo: dump attributes?
-        String methodCall = "createStruct(" + typeName + ", " + attributes + ")";
+        String methodCall = "createStruct(" + typeName + ", " + Arrays.toString(attributes) + ")";
         try {
             return (Struct) reportReturn(methodCall, realConnection.createStruct(typeName, attributes));
         } catch (SQLException s) {
@@ -507,6 +551,7 @@ public class ConnectionSpy implements Connection, Spy {
         }
     }
 
+    @Override
     public boolean isReadOnly() throws SQLException {
         String methodCall = "isReadOnly()";
         try {
@@ -517,6 +562,7 @@ public class ConnectionSpy implements Connection, Spy {
         }
     }
 
+    @Override
     public void setHoldability(int holdability) throws SQLException {
         String methodCall = "setHoldability(" + holdability + ")";
         try {
@@ -528,6 +574,7 @@ public class ConnectionSpy implements Connection, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public CallableStatement prepareCall(String sql) throws SQLException {
         String methodCall = "prepareCall(" + sql + ")";
         try {
@@ -539,6 +586,7 @@ public class ConnectionSpy implements Connection, Spy {
         }
     }
 
+    @Override
     public CallableStatement prepareCall(String sql, int resultSetType, int resultSetConcurrency) throws SQLException {
         String methodCall = "prepareCall(" + sql + ", " + resultSetType + ", " + resultSetConcurrency + ")";
         try {
@@ -550,6 +598,7 @@ public class ConnectionSpy implements Connection, Spy {
         }
     }
 
+    @Override
     public CallableStatement prepareCall(String sql, int resultSetType, int resultSetConcurrency,
             int resultSetHoldability) throws SQLException {
         String methodCall = "prepareCall(" + sql + ", " + resultSetType + ", " + resultSetConcurrency + ", " + resultSetHoldability + ")";
@@ -563,6 +612,7 @@ public class ConnectionSpy implements Connection, Spy {
         }
     }
 
+    @Override
     public void setCatalog(String catalog) throws SQLException {
         String methodCall = "setCatalog(" + catalog + ")";
         try {
@@ -574,6 +624,7 @@ public class ConnectionSpy implements Connection, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public String nativeSQL(String sql) throws SQLException {
         String methodCall = "nativeSQL(" + sql + ")";
         try {
@@ -584,6 +635,7 @@ public class ConnectionSpy implements Connection, Spy {
         }
     }
 
+    @Override
     public Map<String, Class<?>> getTypeMap() throws SQLException {
         String methodCall = "getTypeMap()";
         try {
@@ -594,6 +646,7 @@ public class ConnectionSpy implements Connection, Spy {
         }
     }
 
+    @Override
     public void setAutoCommit(boolean autoCommit) throws SQLException {
         String methodCall = "setAutoCommit(" + autoCommit + ")";
         try {
@@ -605,6 +658,7 @@ public class ConnectionSpy implements Connection, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public String getCatalog() throws SQLException {
         String methodCall = "getCatalog()";
         try {
@@ -615,6 +669,7 @@ public class ConnectionSpy implements Connection, Spy {
         }
     }
 
+    @Override
     public void setTypeMap(java.util.Map<String, Class<?>> map) throws SQLException {
         //todo: dump map??
         String methodCall = "setTypeMap(" + map + ")";
@@ -627,6 +682,7 @@ public class ConnectionSpy implements Connection, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void setTransactionIsolation(int level) throws SQLException {
         String methodCall = "setTransactionIsolation(" + level + ")";
         try {
@@ -638,6 +694,7 @@ public class ConnectionSpy implements Connection, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public boolean getAutoCommit() throws SQLException {
         String methodCall = "getAutoCommit()";
         try {
@@ -648,6 +705,7 @@ public class ConnectionSpy implements Connection, Spy {
         }
     }
 
+    @Override
     public int getHoldability() throws SQLException {
         String methodCall = "getHoldability()";
         try {
@@ -658,6 +716,7 @@ public class ConnectionSpy implements Connection, Spy {
         }
     }
 
+    @Override
     public int getTransactionIsolation() throws SQLException {
         String methodCall = "getTransactionIsolation()";
         try {
@@ -668,6 +727,7 @@ public class ConnectionSpy implements Connection, Spy {
         }
     }
 
+    @Override
     public void commit() throws SQLException {
         String methodCall = "commit()";
         try {
@@ -679,6 +739,7 @@ public class ConnectionSpy implements Connection, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void rollback() throws SQLException {
         String methodCall = "rollback()";
         try {
@@ -690,6 +751,7 @@ public class ConnectionSpy implements Connection, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public void close() throws SQLException {
         String methodCall = "close()";
         try {
@@ -706,6 +768,7 @@ public class ConnectionSpy implements Connection, Spy {
         reportReturn(methodCall);
     }
 
+    @Override
     public <T> T unwrap(Class<T> iface) throws SQLException {
         String methodCall = "unwrap(" + (iface == null ? "null" : iface.getName()) + ")";
         try {
@@ -717,6 +780,7 @@ public class ConnectionSpy implements Connection, Spy {
         }
     }
 
+    @Override
     public boolean isWrapperFor(Class<?> iface) throws SQLException {
         String methodCall = "isWrapperFor(" + (iface == null ? "null" : iface.getName()) + ")";
         try {

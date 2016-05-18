@@ -28,6 +28,7 @@ class MySqlRdbmsSpecifics extends RdbmsSpecifics {
         super();
     }
 
+    @Override
     String formatParameterObject(Object object) {
         if (object instanceof java.sql.Time) {
             return "'" + new SimpleDateFormat("HH:mm:ss").format(object) + "'";
