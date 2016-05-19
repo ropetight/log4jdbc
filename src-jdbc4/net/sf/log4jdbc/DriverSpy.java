@@ -15,6 +15,8 @@
  */
 package net.sf.log4jdbc;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
@@ -84,6 +86,8 @@ import java.util.logging.Logger;
  * @author Tim Azzopardi One line change to add support for JDBC name for Oracle
  */
 public class DriverSpy implements Driver {
+
+    private static final String GLOBAL_SETTING_NAME = "com.tis.sepa.settings";
 
     /**
      * The last actual, underlying driver that was requested via a URL.
@@ -300,29 +304,21 @@ public class DriverSpy implements Driver {
 
     static {
         log.debug("... log4jdbc initializing ...");
-
-        InputStream propStream
-                = DriverSpy.class.getResourceAsStream("/log4jdbc.properties");
-
+        log.debug("System properties: " + System.getProperties().toString());
+        String propFilename = System.getProperty(GLOBAL_SETTING_NAME, "/log4jdbc.properties");
+        log.debug("... log4jdbc settings filename: " + propFilename);
+        
         Properties props = new Properties(System.getProperties());
-        if (propStream != null) {
-            try {
-                props.load(propStream);
-            } catch (IOException e) {
-                log.debug("ERROR!  io exception loading "
-                        + "log4jdbc.properties from classpath: " + e.getMessage());
-            } finally {
-                try {
-                    propStream.close();
-                } catch (IOException e) {
-                    log.debug("ERROR!  io exception closing property file stream: "
-                            + e.getMessage());
-                }
+        try (FileInputStream propStream = new FileInputStream(new File(propFilename))) {
+            if (propStream != null) {
+                    props.load(propStream);
+            } else {
+                log.debug("  log4jdbc.properties not found on classpath");
             }
-            log.debug("  log4jdbc.properties loaded from classpath");
-        } else {
-            log.debug("  log4jdbc.properties not found on classpath");
+        } catch (IOException e) {
+            log.debug("ERROR!  io exception loading " + "log4jdbc.properties from classpath: " + e.getMessage());
         }
+        log.debug("  log4jdbc.properties loaded from classpath");
 
         // look for additional driver specified in properties
         DebugStackPrefix = getStringOption(props, "log4jdbc.debug.stack.prefix");
