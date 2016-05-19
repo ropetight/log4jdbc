@@ -1,5 +1,5 @@
 /**
- * Copyright 2007-2015 Arthur Blake
+ * Copyright 2007-2010 Arthur Blake
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,22 +24,28 @@ import java.util.Date;
  *
  * @author Arthur Blake
  */
-class OracleRdbmsSpecifics extends RdbmsSpecifics {
+class OracleRdbmsSpecifics extends RdbmsSpecifics
+{
+  OracleRdbmsSpecifics()
+  {
+    super();
+  }
 
-    OracleRdbmsSpecifics() {
-        super();
+  String formatParameterObject(Object object)
+  {
+    if (object instanceof Timestamp)
+    {
+      return "to_timestamp('" + new SimpleDateFormat("MM/dd/yyyy HH:mm:ss.SSS").
+        format(object) + "', 'mm/dd/yyyy hh24:mi:ss.ff3')";
     }
-
-    @Override
-    String formatParameterObject(Object object) {
-        if (object instanceof Timestamp) {
-            return "to_timestamp('" + new SimpleDateFormat("MM/dd/yyyy HH:mm:ss.SSS").
-                    format(object) + "', 'mm/dd/yyyy hh24:mi:ss.ff3')";
-        } else if (object instanceof Date) {
-            return "to_date('" + new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").
-                    format(object) + "', 'mm/dd/yyyy hh24:mi:ss')";
-        } else {
-            return super.formatParameterObject(object);
-        }
+    else if (object instanceof Date)
+    {
+      return "to_date('" + new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").
+        format(object) + "', 'mm/dd/yyyy hh24:mi:ss')";
     }
+    else
+    {
+      return super.formatParameterObject(object);
+    }
+  }
 }
