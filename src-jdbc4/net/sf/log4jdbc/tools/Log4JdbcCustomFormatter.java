@@ -27,7 +27,6 @@ public class Log4JdbcCustomFormatter extends Slf4jSpyLogDelegator {
 
     private String sqlPrefix = "SQL:";
 
-
     public int getMargin() {
         return margin.length();
     }
@@ -36,12 +35,9 @@ public class Log4JdbcCustomFormatter extends Slf4jSpyLogDelegator {
         margin = String.format("%1$#" + n + "s", "");
     }
 
-
     public Log4JdbcCustomFormatter() {
     }
 
-
-    
     @Override
     public String sqlOccured(Spy spy, String methodCall, String rawSql) {
         if (loggingType == LoggingType.DISABLED) {
@@ -92,13 +88,11 @@ public class Log4JdbcCustomFormatter extends Slf4jSpyLogDelegator {
         this.loggingType = loggingType;
     }
 
-    public String getSqlPrefix()
-    {
+    public String getSqlPrefix() {
         return sqlPrefix;
     }
 
-    public void setSqlPrefix(String sqlPrefix)
-    {
+    public void setSqlPrefix(String sqlPrefix) {
         this.sqlPrefix = sqlPrefix;
     }
 

@@ -20,59 +20,44 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 /**
- * Encapsulate sql formatting details about a particular relational database management system so that
- * accurate, useable SQL can be composed for that RDMBS.
+ * Encapsulate sql formatting details about a particular relational database management system so that accurate, useable
+ * SQL can be composed for that RDMBS.
  *
  * @author Arthur Blake
  */
-class RdbmsSpecifics
-{
-  /**
-   * Default constructor.
-   */
-  RdbmsSpecifics()
-  {
-  }
+class RdbmsSpecifics {
 
-  protected static final String dateFormat = "MM/dd/yyyy HH:mm:ss.SSS";
+    /**
+     * Default constructor.
+     */
+    RdbmsSpecifics() {
+    }
 
-  /**
-   * Format an Object that is being bound to a PreparedStatement parameter, for display. The goal is to reformat the
-   * object in a format that can be re-run against the native SQL client of the particular Rdbms being used.  This
-   * class should be extended to provide formatting instances that format objects correctly for different RDBMS
-   * types.
-   *
-   * @param object jdbc object to be formatted.
-   * @return formatted dump of the object.
-   */
-  String formatParameterObject(Object object)
-  {
-    if (object == null)
-    {
-      return "NULL";
+    protected static final String dateFormat = "MM/dd/yyyy HH:mm:ss.SSS";
+
+    /**
+     * Format an Object that is being bound to a PreparedStatement parameter, for display. The goal is to reformat the
+     * object in a format that can be re-run against the native SQL client of the particular Rdbms being used. This
+     * class should be extended to provide formatting instances that format objects correctly for different RDBMS types.
+     *
+     * @param object jdbc object to be formatted.
+     * @return formatted dump of the object.
+     */
+    String formatParameterObject(Object object) {
+        if (object == null) {
+            return "NULL";
+        } else if (object instanceof String) {
+            // todo: need to handle imbedded quotes??
+            return "'" + object + "'";
+        } else if (object instanceof Date) {
+            return "'" + new SimpleDateFormat(dateFormat).format(object) + "'";
+        } else if (object instanceof Boolean) {
+            return DriverSpy.DumpBooleanAsTrueFalse
+                    ? ((Boolean) object).booleanValue() ? "true" : "false"
+                    : ((Boolean) object).booleanValue() ? "1" : "0";
+        } else {
+            return object.toString();
+        }
     }
-    else
-    {
-      if (object instanceof String)
-      {
-        // todo: need to handle imbedded quotes??
-        return "'" + object + "'";
-      }
-      else if (object instanceof Date)
-      {
-        return "'" + new SimpleDateFormat(dateFormat).format(object) + "'";
-      }
-      else if (object instanceof Boolean)
-      {
-        return DriverSpy.DumpBooleanAsTrueFalse?
-            ((Boolean)object).booleanValue()?"true":"false"
-            :((Boolean)object).booleanValue()?"1":"0";
-      }
-      else
-      {
-        return object.toString();
-      }
-    }
-  }
 
 }
