@@ -862,4 +862,27 @@ public class StatementSpy implements Statement, Spy {
         }
     }
 
+    @Override
+    public void closeOnCompletion() throws SQLException {
+        String methodCall = "closeOnCompletion()";
+        try {
+            realStatement.closeOnCompletion();
+        } catch (SQLException s) {
+            reportException(methodCall, s);
+            throw s;
+        }
+        reportReturn(methodCall);    
+    }
+
+    @Override
+    public boolean isCloseOnCompletion() throws SQLException {
+        String methodCall = "isCloseOnCompletion()";
+        try {
+            return reportReturn(methodCall, realStatement.isCloseOnCompletion());
+        } catch (SQLException s) {
+            reportException(methodCall, s);
+            throw s;
+        }
+    }
+    
 }

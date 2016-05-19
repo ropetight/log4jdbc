@@ -37,6 +37,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.concurrent.Executor;
 
 /**
  * Wraps a JDBC Connection and reports method calls, returns and exceptions.
@@ -779,4 +780,65 @@ public class ConnectionSpy implements Connection, Spy {
             throw s;
         }
     }
+    
+    @Override
+    public void setSchema(String schema) throws SQLException{
+        String methodCall = "setSchema(" + schema + ")";
+        try {
+            realConnection.setSchema(schema);
+        } catch (SQLException s) {
+            reportException(methodCall, s);
+            throw s;
+        }
+        reportReturn(methodCall);        
+    }
+
+    @Override
+    public String getSchema() throws SQLException {
+        String methodCall = "getSchema()";
+        try {
+            return (String) reportReturn(methodCall, realConnection.getSchema());
+        } catch (SQLException s) {
+            reportException(methodCall, s);
+            throw s;
+        }
+        
+    }
+
+    @Override
+    public void abort(Executor executor) throws SQLException {
+        String methodCall = "abort(" + executor + ")";
+        try {
+            realConnection.abort(executor);
+        } catch (SQLException s) {
+            reportException(methodCall, s);
+            throw s;
+        }
+        reportReturn(methodCall);
+    }
+    
+    @Override
+    public void setNetworkTimeout(Executor executor, int milliseconds) throws SQLException {
+        String methodCall = "setNetworkTimeout(" + executor+ ", " + milliseconds + ")";
+        try {
+            realConnection.setNetworkTimeout(executor, milliseconds);
+        } catch (SQLException s) {
+            reportException(methodCall, s);
+            throw s;
+        }
+        reportReturn(methodCall);
+        
+    }
+    
+    @Override
+    public int getNetworkTimeout() throws SQLException {
+        String methodCall = "getNetworkTimeout()";
+        try {
+            return reportReturn(methodCall, realConnection.getNetworkTimeout());
+        } catch (SQLException s) {
+            reportException(methodCall, s);
+            throw s;
+        }        
+    }
+    
 }
