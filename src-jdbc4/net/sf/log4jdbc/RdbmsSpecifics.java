@@ -37,7 +37,6 @@ public class RdbmsSpecifics {
     RdbmsSpecifics() {
     }
 
-
     /**
      * Format an Object that is being bound to a PreparedStatement parameter, for display. The goal is to reformat the
      * object in a format that can be re-run against the native SQL client of the particular Rdbms being used. This
